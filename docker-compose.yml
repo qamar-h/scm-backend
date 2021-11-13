@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+
+  scm-api:
+    container_name: scm-backend
+    build: .docker/php
+    ports:
+      - "3001:80"
+    volumes:
+      - "/Users/qamar/Desktop/scm:/var/www/html"
+    depends_on:
+      - database
+   
+###> doctrine/doctrine-bundle ###
+  database:
+    image: 'mysql:latest'
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: scm
+    ports:
+      # To allow the host machine to access the ports below, modify the lines below.
+      # For example, to allow the host to connect to port 3306 on the container, you would change
+      # "3306" to "3306:3306". Where the first port is exposed to the host and the second is the container port.
+      # See https://docs.docker.com/compose/compose-file/#ports for more information.
+      - '3306'
+      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
+    volumes:
+      - db-data:/var/lib/mysql:rw
+###< doctrine/doctrine-bundle ###
+
+volumes:
+###> doctrine/doctrine-bundle ###
+  db-data:
+###< doctrine/doctrine-bundle ###

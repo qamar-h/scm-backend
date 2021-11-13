@@ -1,0 +1,137 @@
+name: School Management CI
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+  push:
+    branches:
+      - main
+      - dev
+jobs:
+
+  symfony:
+
+    name: Symfony & API Platform (PHP ${{ matrix.php-versions }})
+    runs-on: ubuntu-20.04
+
+    services:
+      scm_db:
+        image: mariadb:10.3
+        env:
+          MYSQL_DATABASE: scm
+          MYSQL_ROOT_PASSWORD: password
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    strategy:
+      fail-fast: true
+      matrix:
+        php-versions: ['8.0']
+
+    steps:
+
+      # -----------------------
+      #   Setup Github actions
+      #   https://github.com/actions/checkout (official)
+      # -----------------------
+      - name: Setup Github actions
+        uses: actions/checkout@v2
+
+      # -------------------------
+      #   Setup PHP
+      #   https://github.com/shivammathur/setup-php (community)
+      # -------------------------
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, filter, gd, iconv, json, mbstring, pdo
+        env:
+          update: true
+
+      # -------------------------
+      #   Check PHP Version
+      # -------------------------
+      - name: Check PHP Version
+        run: php -v
+
+      # -------------------------
+      #   Validate Composer
+      # -------------------------
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+
+      # -------------------------
+      #   Get composer cache directory
+      # -------------------------
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      # -------------------------
+      #   Cache composer dependencies
+      # -------------------------
+      - name: Cache composer dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      # -------------------------
+      #   File recovery needed
+      # -------------------------
+      - name: File recovery needed
+        run: mv .env.test .env
+        #&& mv config/jwt/private_test.pem config/jwt/private.pem && mv config/jwt/public_test.pem config/jwt/public.pem
+
+      # -------------------------
+      #   Install Composer dependencies
+      # -------------------------
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress
+
+      # -------------------------
+      #   DB Migration
+      # -------------------------
+      - name: DB Migration
+        run: php bin/console doctrine:migration:migrate --no-interaction
+        #run: php bin/console d:s:u --force
+
+      # -------------------------
+      #   LOAD Fixture for test
+      # -------------------------
+      - name: LOAD Fixture
+        run: php bin/console doctrine:fixtures:load --no-interaction
+
+      # -------------------------
+      #   Start application
+      # -------------------------
+      - name: Start application
+        run: php -S 127.0.0.1:3001 -t public/ &> /dev/null &
+
+      # -------------------------
+      #   Run PHPUNIT tests
+      # -------------------------
+      - name: PHPUNIT tests
+        run: php bin/phpunit
+
+      # -------------------------
+      #   Run API Tests
+      # -------------------------
+      - name: API Tests
+        id: run-newman
+        uses: anthonyvscode/newman-action@v1
+        with:
+          collection: postman/SCM.postman_collection.json
+          environment: postman/SCM.postman_environment.json
+          reporters: cli
+
+      # -------------------------
+      #   OUTPUT test result for API tests
+      # -------------------------
+      - name: OUTPUT test result for API tests
+        run: echo ${{ steps.run-newman.outputs.summary }}
+
