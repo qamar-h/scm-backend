@@ -1,0 +1,1 @@
+![Homepage view](./public/logo_api.jpg)

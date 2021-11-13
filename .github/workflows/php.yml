@@ -116,7 +116,7 @@ jobs:
       #   Run PHPUNIT tests
       # -------------------------
       - name: PHPUNIT tests
-        run: php bin/phpunit
+        run: ./vendor/bin/phpunit
 
       # -------------------------
       #   Run API Tests

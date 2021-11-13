@@ -1,4 +1,10 @@
 {
+    "name": "schoolmanagement/backend",
+    "description": "The School Management API",
+    "authors": [{
+        "name": "Qamar HAYAT",
+        "email": "hayat.qamar@gmail.com"
+    }],
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",
