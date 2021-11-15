@@ -4,11 +4,34 @@ namespace Infrastructure\ORM;
 
 interface RepositoryInterface
 {
-    public function find($id, $lockMode = null, $lockVersion = null);
+    /**
+     *
+     * @param integer $id
+     * @param mixed $lockMode
+     * @param mixed $lockVersion
+     * @return object|null
+     */
+    public function find(int $id, mixed $lockMode = null, mixed $lockVersion = null): ?object;
 
-    public function findOneBy(array $criteria, array $orderBy = null);
+    /**
+     *
+     * @param array<string, int> $criteria
+     * @param array<string, int>|null $orderBy
+     * @return object|null
+     */
+    public function findOneBy(array $criteria, array $orderBy = null): ?object;
 
-    public function findAll();
+    /**
+     * @return array<object>|null
+     */
+    public function findAll(): ?array;
 
-    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null);
+    /**
+     * @param array<string, int> $criteria
+     * @param array<string, int>|null $orderBy
+     * @param int|null $limit
+     * @param int|null $offset
+     * @return array<object>|null
+     */
+    public function findBy(array $criteria, array $orderBy = null, int $limit = null, int $offset = null): ?array;
 }

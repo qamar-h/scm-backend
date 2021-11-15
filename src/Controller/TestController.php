@@ -17,5 +17,6 @@ class TestController extends AbstractController
         $age = $user->getPerson()->getAge();
 
         dd("Je m'appelle $fullname et j'ai $age an" . ($age > 1 ? "s" : ""));
+        return new Response('toto');
     }
 }

@@ -19,6 +19,9 @@
 
     <testsuites>
         <testsuite name="Project Test Suite">
+            <directory suffix=".php">./src/*Bundle</directory>
+            <directory suffix=".php">./scm/</directory>
+            <directory suffix=".php">./infrastructure/</directory>
             <directory>tests</directory>
         </testsuite>
     </testsuites>

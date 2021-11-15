@@ -2,6 +2,7 @@
 
 namespace SCM\User\Entity;
 
+use SCM\User\ValueObject\Person;
 use SCM\User\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -55,9 +56,10 @@ class User implements UserInterface
     private ?string $avatar;
 
     /**
-     * @ORM\Embedded(class="SCM\User\Entity\Person")
+     * @ORM\Embedded(class="SCM\User\ValueObject\Person")
      *
      */
+    #[Groups(["user_get"])]
     private Person $person;
 
     /**
@@ -150,7 +152,7 @@ class User implements UserInterface
         return null;
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
     }
 
@@ -171,9 +173,11 @@ class User implements UserInterface
         return $this->deletedAt;
     }
 
-    public function setDeletedAt($deletedAt)
+    public function setDeletedAt(?\DateTimeInterface $deletedAt): self
     {
         $this->deletedAt = $deletedAt;
+
+        return $this;
     }
 
     public function isAccountNonExpired(): bool
@@ -264,12 +268,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function __call(string $name, array $arguments)
-    {
-        // TODO: Implement @method string getUserIdentifier()
-    }
-
-    public function getUserIdentifier()
+    public function getUserIdentifier(): string
     {
         return $this->email;
     }

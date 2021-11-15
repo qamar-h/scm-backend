@@ -1,6 +1,6 @@
 <?php
 
-namespace SCM\User\Entity;
+namespace SCM\User\ValueObject;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -93,7 +93,7 @@ class Person
     /**
      * Get the value of dateOfBirthday
      */
-    public function getDateOfBirthday(): \DateTime
+    public function getDateOfBirthday(): ?\DateTime
     {
         return $this->dateOfBirthday;
     }

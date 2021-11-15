@@ -85,12 +85,18 @@ jobs:
       # -------------------------
       - name: File recovery needed
         run: mv .env.test .env
-        
+              
       # -------------------------
       #   Install Composer dependencies
       # -------------------------
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress
+
+      # -------------------------
+      #   PHP CS CHECK
+      # -------------------------
+      - name: PHP CS check
+        run: ./vendor/bin/phpcs src/ scm/ infrastructure/
 
       # -------------------------
       #   DB Migration
