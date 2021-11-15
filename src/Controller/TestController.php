@@ -11,7 +11,7 @@ class TestController extends AbstractController
 {
     #[Route('/test', name: 'test')]
     public function index(UserRepository $repository): Response
-    {   
+    {
         $user = $repository->find(1);
         $fullname = $user->getPerson()->getFullname();
         $age = $user->getPerson()->getAge();

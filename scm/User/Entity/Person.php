@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace SCM\User\Entity;
 
@@ -39,8 +39,8 @@ class Person
     private ?bool $gender;
 
     public function __construct(
-        string $firsntame = '', 
-        string $lastname = '', 
+        string $firsntame = '',
+        string $lastname = '',
         \Datetime $dateOfBirthday = null,
         bool $gender = true
     ) {
@@ -52,7 +52,7 @@ class Person
 
     /**
      * Get the value of lastname
-     */ 
+     */
     public function getLastname(): ?string
     {
         return $this->lastname;
@@ -62,7 +62,7 @@ class Person
      * Set the value of lastname
      *
      * @return  self
-     */ 
+     */
     public function setLastname(?string $lastname): self
     {
         $this->lastname = $lastname;
@@ -72,7 +72,7 @@ class Person
 
     /**
      * Get the value of firstname
-     */ 
+     */
     public function getFirstname(): ?string
     {
         return $this->firstname;
@@ -82,7 +82,7 @@ class Person
      * Set the value of firstname
      *
      * @return  self
-     */ 
+     */
     public function setFirstname(?string $firstname): self
     {
         $this->firstname = $firstname;
@@ -92,7 +92,7 @@ class Person
 
     /**
      * Get the value of dateOfBirthday
-     */ 
+     */
     public function getDateOfBirthday(): \DateTime
     {
         return $this->dateOfBirthday;
@@ -102,7 +102,7 @@ class Person
      * Set the value of dateOfBirthday
      *
      * @return  self
-     */ 
+     */
     public function setDateOfBirthday(?\Datetime $dateOfBirthday)
     {
         $this->dateOfBirthday = $dateOfBirthday;
@@ -112,13 +112,13 @@ class Person
 
     public function getAge(): int
     {
-        if(null === $this->getDateOfBirthday()) {
+        if (null === $this->getDateOfBirthday()) {
             return 0;
         }
 
         $diff = $this->getDateOfBirthday()
             ->diff(new \DateTime('now'));
- 
+
         return $diff->y;
     }
 
@@ -134,7 +134,7 @@ class Person
 
     /**
      * Get the value of gender
-     */ 
+     */
     public function getGender(): ?bool
     {
         return $this->gender;
@@ -144,7 +144,7 @@ class Person
      * Set the value of gender
      *
      * @return  self
-     */ 
+     */
     public function setGender(?bool $gender): self
     {
         $this->gender = $gender;

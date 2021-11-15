@@ -166,7 +166,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getDeletedAt(): ? \DateTimeInterface
+    public function getDeletedAt(): ?\DateTimeInterface
     {
         return $this->deletedAt;
     }

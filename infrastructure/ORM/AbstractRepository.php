@@ -27,12 +27,12 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Rep
     {
         return parent::findOneBy($criteria, $orderBy);
     }
-    
+
     public function findAll()
     {
         return parent::findAll();
     }
-    
+
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
         return parent::findBy($criteria, $orderBy, $limit, $offset);

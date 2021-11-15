@@ -21,7 +21,7 @@ class UserFixtures extends Fixture
             ->setUpdatedAt(new \DateTimeImmutable())
             ->setCreatedBy('fixtures')
             ->setUpdatedBy('fixtures');
-        
+
         $password = $this->userPasswordEncoder->encodePassword($admin, 'admin');
         $admin->setPassword($password);
         $admin->getPerson()

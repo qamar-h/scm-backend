@@ -85,8 +85,7 @@ jobs:
       # -------------------------
       - name: File recovery needed
         run: mv .env.test .env
-        #&& mv config/jwt/private_test.pem config/jwt/private.pem && mv config/jwt/public_test.pem config/jwt/public.pem
-
+        
       # -------------------------
       #   Install Composer dependencies
       # -------------------------
@@ -117,6 +116,18 @@ jobs:
       # -------------------------
       - name: PHPUNIT tests
         run: ./vendor/bin/phpunit
+            
+      # -------------------------
+      #   JWT private key
+      # -------------------------
+      - name: JWT Private key generation
+        run: cd config/ && mkdir jwt && ls -l && openssl genrsa -out jwt/private.pem -aes256 -passout pass:f3550d3aa3b898071a040b04784c5011 4096
+      
+      # -------------------------
+      #   JWT public key
+      # -------------------------
+      - name: JWT Public key generation
+        run: openssl rsa -pubout -in config/jwt/private.pem --passin pass:f3550d3aa3b898071a040b04784c5011 -out config/jwt/public.pem
 
       # -------------------------
       #   Run API Tests
