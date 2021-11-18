@@ -4,6 +4,7 @@ namespace SCM\User\ValueObject;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\MappedSuperclass
@@ -15,7 +16,8 @@ class Person
      *
      * @var string|null
      */
-    #[Groups(["user_get"])]
+    #[Assert\NotBlank(message:'Merci de renseigner le nom')]
+    #[Groups(["user_get", "user_create"])]
     private ?string $lastname;
 
     /**
@@ -23,19 +25,21 @@ class Person
      *
      * @var string|null
      */
-    #[Groups(["user_get"])]
+    #[Assert\NotBlank(message:'Merci de renseigner le prénom')]
+    #[Groups(["user_get", "user_create"])]
     private ?string $firstname;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    #[Groups(["user_get"])]
+    #[Assert\NotBlank(message:'Merci de renseigner le date de naissance')]
+    #[Groups(["user_get", "user_create"])]
     private ?\DateTime $dateOfBirthday;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    #[Groups(["user_get"])]
+    #[Groups(["user_get", "user_create"])]
     private ?bool $gender;
 
     public function __construct(
