@@ -3,7 +3,6 @@
 namespace SCM\User\Entity;
 
 use SCM\User\ValueObject\Person;
-use SCM\User\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -11,12 +10,23 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use Infrastructure\Security\UserInterface;
+use SCM\Utils\Entity\BlameableTrait;
+use SCM\Utils\Entity\TimestampableTrait;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\Entity(repositoryClass=SCM\User\Repository\UserRepository::class)
  */
 #[ApiResource(
+    collectionOperations:[
+        "post" => ["messenger" => true,  "output" => false, "status" => 201],
+        "get"
+    ],
+    itemOperations: [
+        "get",
+        "delete" => ["messenger" => true,  "output" => false, "status" => 202],
+    ],
+    denormalizationContext: ['groups' => ['user_create']],
     normalizationContext: ['groups' => ['user_get']],
     paginationItemsPerPage: 6,
 )]
@@ -29,6 +39,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
 ])]
 class User implements UserInterface
 {
+    use TimestampableTrait;
+
+    use BlameableTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -46,59 +60,26 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     #[Assert\NotBlank(message:'Merci de renseigner une adresse email')]
-    #[Groups(["user_get"])]
+    #[Groups(["user_get","user_create"])]
     private string $email;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    #[Groups(["user_get"])]
+    #[Groups(["user_get","user_create"])]
     private ?string $avatar;
 
     /**
      * @ORM\Embedded(class="SCM\User\ValueObject\Person")
-     *
      */
-    #[Groups(["user_get"])]
+    #[Groups(["user_get", "user_create"])]
+    #[Assert\Valid]
     private Person $person;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private ?\DateTimeInterface $deletedAt = null;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private ?string $deletedBy;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    #[Groups(["user_get"])]
-    private \DateTimeInterface $createdAt;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    #[Groups(["user_get"])]
-    private string $createdBy;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    #[Groups(["user_get"])]
-    private \DateTimeInterface $updatedAt;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    #[Groups(["user_get"])]
-    private string $updatedBy;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    #[Groups(["user_create"])]
     private ?string $plainPassword = '';
 
     public function __construct()
@@ -156,30 +137,6 @@ class User implements UserInterface
     {
     }
 
-    public function getDeletedBy(): ?string
-    {
-        return $this->deletedBy;
-    }
-
-    public function setDeletedBy(?string $deletedBy): self
-    {
-        $this->deletedBy = $deletedBy;
-
-        return $this;
-    }
-
-    public function getDeletedAt(): ?\DateTimeInterface
-    {
-        return $this->deletedAt;
-    }
-
-    public function setDeletedAt(?\DateTimeInterface $deletedAt): self
-    {
-        $this->deletedAt = $deletedAt;
-
-        return $this;
-    }
-
     public function isAccountNonExpired(): bool
     {
         return true;
@@ -193,54 +150,6 @@ class User implements UserInterface
     public function isCredentialsNonExpired(): bool
     {
         return true;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getCreatedBy(): ?string
-    {
-        return $this->createdBy;
-    }
-
-    public function setCreatedBy(string $createdBy): self
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    public function getUpdatedBy(): ?string
-    {
-        return $this->updatedBy;
-    }
-
-    public function setUpdatedBy(string $updatedBy): self
-    {
-        $this->updatedBy = $updatedBy;
-
-        return $this;
     }
 
     public function getRoles(): array
@@ -276,5 +185,12 @@ class User implements UserInterface
     public function getPerson(): Person
     {
         return $this->person;
+    }
+
+    public function setPerson(Person $person): self
+    {
+        $this->person = $person;
+
+        return $this;
     }
 }
