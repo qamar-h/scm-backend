@@ -39,8 +39,6 @@ class UserPersistHandler implements HandlerInterface
         $user->setUpdatedAt(new \DateTimeImmutable());
         $user->setUpdatedBy($this->currentUserFullName());
 
-        $user->getPerson()->setDateOfBirthday(new \DateTime('now'));
-
         $this->em->persist($user);
         $this->em->flush();
     }
