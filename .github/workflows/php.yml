@@ -97,6 +97,12 @@ jobs:
       # -------------------------
       - name: PHP CS check
         run: ./vendor/bin/phpcs src/ scm/ infrastructure/
+      
+      # -------------------------
+      #   PHP CS CHECK
+      # -------------------------
+      - name: PHP MD check
+        run: ./vendor/bin/phpmd src/,scm/,infrastructure/ ansi ./phpmd.xml --exclude src/Kernel.php
 
       # -------------------------
       #   DB Migration
