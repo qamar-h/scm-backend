@@ -29,3 +29,6 @@ phpstan:
 
 phpunit:
 	@docker exec -i scm-backend ./vendor/bin/phpunit
+
+phpmd:
+	@docker exec -i scm-backend ./vendor/bin/phpmd src/,scm/,infrastructure/ ansi ./phpmd.xml --exclude src/Kernel.php
