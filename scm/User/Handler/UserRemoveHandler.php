@@ -8,6 +8,7 @@ use Infrastructure\Security\SecurityInterface;
 use SCM\User\Exception\UserNotFoundException;
 use SCM\User\Message\UserRemove;
 use SCM\User\Repository\UserRepository;
+use DateTimeImmutable;
 
 class UserRemoveHandler implements HandlerInterface
 {
@@ -24,7 +25,7 @@ class UserRemoveHandler implements HandlerInterface
             throw new UserNotFoundException('User not found');
         }
 
-        $user->setDeletedAt(new \DateTimeImmutable());
+        $user->setDeletedAt(new DateTimeImmutable());
         $user->setDeletedBy(
             $this->security->getUser() !== null ?
             $this->security->getUser()->getPerson()->getFullname() : ''
