@@ -102,10 +102,10 @@ docker-build: ## Builds the PHP image
 down: ## Stop the docker hub
 	$(DOCKER_COMP) down --remove-orphans
 
-destroy:## destroy  docker containers
+destroy: ## destroy  docker containers
 	$(DOCKER_COMP) rm -v --force --stop || true
 
-restart:
+restart: ## restart docker containers
 	$(DOCKER_COMP) restart $$(docker  -l -c )	
 
 bash: ## Connect to the application container
@@ -121,11 +121,11 @@ delete-images: ## Delete Delete all images
 	$(DOCKER) rmi $$(docker images -q)
 
 stop-containers: ## Stop all containers
-	docker stop `docker ps -q`
+	$(DOCKER) stop `docker ps -q`
 
 ## —— Stripe 💳 ————————————————————————————————————————————————————————
 
-stripe : ## install stripe
+stripe: ## install stripe
 	$(DOCKER) exec  $(PROJECT) composer require stripe/stripe-php
 
 ## —— Project 🐝 ———————————————————————————————————————————————————————————————
@@ -149,9 +149,6 @@ load-fixtures: ## Build the DB, control the schema validity, load fixtures and c
 	 $(DOCKER) exec -i $(PROJECT) $(PHP) --env=dev doctrine:schema:validate
 	 $(DOCKER) exec -i $(PROJECT) $(PHP) --env=dev doctrine:fixtures:load --no-interaction
 
-app-db:
-	$(DOCKER) exec -it $(PROJECT) sh -c "mysql -u root -ppassword scm"
-
 rebuild-database: drop-db create-db migration migrate-force load-fixtures ## Drop database, create database, Doctrine migration migrate,reload fixtures
 
 create-db:## Create the database
@@ -163,7 +160,7 @@ reload-fixtures:## reload just fixtures
 drop-db:## Drop the  database (before using this command, connect on your container with make:bash)
 	$(DOCKER) exec -i $(PROJECT) $(PHP)   doctrine:database:drop --force --no-interaction
 
-app-db:
+app-db: ## MYSQL CLI access
 	$(DOCKER) exec -it $(PROJECT_DB) sh -c "mysql -u root -p password scm"
 
 ## —— Tests ✅ —————————————————————————————————————————————————————————————————
@@ -179,8 +176,8 @@ test-all: phpunit.xml ## Run all tests
 phpunit: ## Run PHP unit test
 	$(DOCKER) exec -i $(PROJECT) $(PHPUNIT)
 
-phpstan:
+phpstan: ## Run PHP STAN test
 	$(DOCKER) exec -i $(PROJECT) $(PHPSTAN)
 
-phpcs:
+phpcs: ## Run PHP CS test
 	$(DOCKER) exec -i $(PROJECT) $(PHP_CS) src/ scm/ infrastructure/
