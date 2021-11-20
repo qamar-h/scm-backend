@@ -5,6 +5,7 @@ namespace SCM\User\ValueObject;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use DateTime;
 
 /**
  * @ORM\MappedSuperclass
@@ -34,7 +35,7 @@ class Person
      */
     #[Assert\NotBlank(message:'Merci de renseigner le date de naissance')]
     #[Groups(["user_get", "user_create"])]
-    private ?\DateTime $dateOfBirthday;
+    private ?DateTime $dateOfBirthday;
 
     /**
      * @ORM\Column(type="boolean")
@@ -45,7 +46,7 @@ class Person
     public function __construct(
         string $firsntame = '',
         string $lastname = '',
-        \Datetime $dateOfBirthday = null,
+        Datetime $dateOfBirthday = null,
         bool $gender = true
     ) {
         $this->firstname = $firsntame;
@@ -97,7 +98,7 @@ class Person
     /**
      * Get the value of dateOfBirthday
      */
-    public function getDateOfBirthday(): ?\DateTime
+    public function getDateOfBirthday(): ?DateTime
     {
         return $this->dateOfBirthday;
     }
@@ -107,7 +108,7 @@ class Person
      *
      * @return  self
      */
-    public function setDateOfBirthday(?\Datetime $dateOfBirthday)
+    public function setDateOfBirthday(?Datetime $dateOfBirthday)
     {
         $this->dateOfBirthday = $dateOfBirthday;
 
@@ -121,7 +122,7 @@ class Person
         }
 
         $diff = $this->getDateOfBirthday()
-            ->diff(new \DateTime('now'));
+            ->diff(new DateTime('now'));
 
         return $diff->y;
     }

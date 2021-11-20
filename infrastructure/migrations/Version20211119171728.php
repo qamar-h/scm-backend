@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Infrastructure\migrations;
+namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20211113175303 extends AbstractMigration
+final class Version20211119171728 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -25,13 +25,13 @@ final class Version20211113175303 extends AbstractMigration
             password VARCHAR(255) NOT NULL, 
             email VARCHAR(255) NOT NULL, 
             avatar VARCHAR(255) DEFAULT NULL, 
-            deleted_at DATETIME DEFAULT NULL, 
-            deleted_by VARCHAR(255) DEFAULT NULL, 
-            created_at DATETIME NOT NULL, 
-            created_by VARCHAR(255) NOT NULL, 
-            updated_at DATETIME NOT NULL, 
-            updated_by VARCHAR(255) NOT NULL, 
             plain_password VARCHAR(255) DEFAULT NULL, 
+            created_at DATETIME NOT NULL, 
+            updated_at DATETIME NOT NULL, 
+            deleted_at DATETIME DEFAULT NULL, 
+            created_by VARCHAR(255) NOT NULL, 
+            updated_by VARCHAR(255) NOT NULL, 
+            deleted_by VARCHAR(255) DEFAULT NULL, 
             person_lastname VARCHAR(255) NOT NULL, 
             person_firstname VARCHAR(255) NOT NULL, 
             person_date_of_birthday DATETIME NOT NULL, 

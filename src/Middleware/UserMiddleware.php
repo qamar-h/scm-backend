@@ -14,13 +14,13 @@ class UserMiddleware implements MiddlewareInterface
     public function handle(Envelope $envelope, StackInterface $stack): Envelope
     {
         if ($envelope->getMessage() instanceof User) {
+            $envelope = new Envelope(
+                new UserPersist($envelope->getMessage())
+            );
+
             if ($envelope->last(RemoveStamp::class)) {
                 $envelope = new Envelope(
                     new UserRemove($envelope->getMessage()->getId())
-                );
-            } else {
-                $envelope = new Envelope(
-                    new UserPersist($envelope->getMessage())
                 );
             }
         }

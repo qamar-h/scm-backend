@@ -4,6 +4,7 @@ namespace Infrastructure\ORM;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 
 abstract class AbstractRepository extends ServiceEntityRepository implements RepositoryInterface
 {
@@ -12,7 +13,7 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Rep
     public function __construct(ManagerRegistry $registry)
     {
         if (null == $this->entityClass) {
-            throw new \Exception('No entity specified!');
+            throw new Exception('No entity specified!');
         }
 
         parent::__construct($registry, $this->entityClass);

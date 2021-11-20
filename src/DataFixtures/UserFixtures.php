@@ -6,6 +6,8 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Infrastructure\Security\UserPasswordEncoder;
 use SCM\User\Entity\User;
+use DateTimeImmutable;
+use DateTime;
 
 class UserFixtures extends Fixture
 {
@@ -17,8 +19,8 @@ class UserFixtures extends Fixture
     {
         $admin = (new User())
             ->setEmail('admin@scm.fr')
-            ->setCreatedAt(new \DateTimeImmutable())
-            ->setUpdatedAt(new \DateTimeImmutable())
+            ->setCreatedAt(new DateTimeImmutable())
+            ->setUpdatedAt(new DateTimeImmutable())
             ->setCreatedBy('fixtures')
             ->setUpdatedBy('fixtures');
 
@@ -27,7 +29,7 @@ class UserFixtures extends Fixture
         $admin->getPerson()
             ->setLastname('Hayat')
             ->setFirstname('Qamar')
-            ->setDateOfBirthday(new \DateTime('1987-12-26'))
+            ->setDateOfBirthday(new DateTime('1987-12-26'))
             ->setGender(true);
 
         $manager->persist($admin);

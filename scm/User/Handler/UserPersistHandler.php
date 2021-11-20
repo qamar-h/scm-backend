@@ -8,6 +8,7 @@ use Infrastructure\Security\{ UserPasswordEncoder, SecurityInterface };
 use SCM\User\Entity\User;
 use SCM\User\Exception\PasswordEmptyException;
 use SCM\User\Message\UserPersist;
+use DateTimeImmutable;
 
 class UserPersistHandler implements HandlerInterface
 {
@@ -32,11 +33,11 @@ class UserPersistHandler implements HandlerInterface
         }
 
         if ($user->getId() === null) {
-            $user->setCreatedAt(new \DateTimeImmutable());
+            $user->setCreatedAt(new DateTimeImmutable());
             $user->setCreatedBy($this->currentUserFullName());
         }
 
-        $user->setUpdatedAt(new \DateTimeImmutable());
+        $user->setUpdatedAt(new DateTimeImmutable());
         $user->setUpdatedBy($this->currentUserFullName());
 
         $this->em->persist($user);
