@@ -130,16 +130,15 @@ stripe: ## install stripe
 
 ## —— Project 🐝 ———————————————————————————————————————————————————————————————
 
-build : docker-build up install update    ## Build project, Install vendors according to the current composer.lock file, install symfony cli, Stripe
+commands: ## Display all commands in the project namespace
+	$(DOCKER) exec -i $(PROJECT) $(PHP)  list $(PROJECT)
 
-start: load-fixtures  ##load-fixtures  serve ## build project,Start docker, load fixtures and start the webserver
+build : docker-build up install load-fixtures   ## Build project, Install vendors according to the current composer.lock file load fixtures
 
 reload: restart load-fixtures  ## Load fixtures 
 
 stop: down  ## Stop docker and the Symfony binary server
 
-commands: ## Display all commands in the project namespace
-	$(DOCKER) exec -i $(PROJECT) $(PHP)  list $(PROJECT)
 
 load-fixtures: ## Build the DB, control the schema validity, load fixtures and check the migration status
 	 $(DOCKER) exec -i $(PROJECT) $(PHP) --env=dev doctrine:cache:clear-metadata
