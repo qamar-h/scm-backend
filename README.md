@@ -19,14 +19,9 @@ git clone https://github.com/qamar-h/scm-backend.git
 cd scm-backend
 ```
 
-## Building
-```bash
-sudo make build
-```
-
 ## Start
 ```bash
-sudo make up
+sudo make build 
 ```
 
 ## Access
@@ -36,4 +31,11 @@ http://localhost:3001
 
 ## For Dev
  Refer to the Makefile to know the commands you would need throughout your development.
+
+ ``` 
+make help
+``` 
+to see the list of makefile commands in terminal 
+
+
 
