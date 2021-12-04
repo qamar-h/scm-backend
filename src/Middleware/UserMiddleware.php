@@ -15,14 +15,10 @@ class UserMiddleware implements MiddlewareInterface
     {
         if ($envelope->getMessage() instanceof User) {
             $envelope = new Envelope(
-                new UserPersist($envelope->getMessage())
+                $envelope->last(RemoveStamp::class) === null
+                ? new UserPersist($envelope->getMessage())
+                : new UserRemove($envelope->getMessage()->getId())
             );
-
-            if ($envelope->last(RemoveStamp::class)) {
-                $envelope = new Envelope(
-                    new UserRemove($envelope->getMessage()->getId())
-                );
-            }
         }
 
         return $stack->next()->handle($envelope, $stack);

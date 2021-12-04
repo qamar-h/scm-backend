@@ -23,3 +23,5 @@ framework:
         routing:
             # Route your messages to the transports
             'SCM\User\Entity\User': sync
+            'SCM\User\Message\UserRemove': sync
+            'SCM\User\Message\UserPersist': sync

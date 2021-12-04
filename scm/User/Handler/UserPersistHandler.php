@@ -33,6 +33,7 @@ class UserPersistHandler implements HandlerInterface
         }
 
         if ($user->getId() === null) {
+            $user->setAvatar('/default-avatar.jpg');
             $user->setCreatedAt(new DateTimeImmutable());
             $user->setCreatedBy($this->currentUserFullName());
         }

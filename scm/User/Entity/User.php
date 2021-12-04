@@ -13,6 +13,7 @@ use Infrastructure\Security\UserInterface;
 use SCM\Utils\Entity\BlameableTrait;
 use SCM\Utils\Entity\TimestampableTrait;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Infrastructure\ApiPlatform\DeletedAtFilter;
 
 /**
  * @ORM\Entity(repositoryClass=SCM\User\Repository\UserRepository::class)
@@ -24,17 +25,20 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ],
     itemOperations: [
         "get",
+        "put",
+        "patch" => ["messenger" => true,  "output" => false, "status" => 201],
         "delete" => ["messenger" => true,  "output" => false, "status" => 202],
     ],
     denormalizationContext: ['groups' => ['user_create']],
     normalizationContext: ['groups' => ['user_get']],
     paginationItemsPerPage: 6,
 )]
+#[ApiFilter(DeletedAtFilter::class)]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'lastname', 'firstname'])]
 #[ApiFilter(SearchFilter::class, properties: [
-    'gender' => 'exact',
-    'lastname' => 'partial',
-    'firstname' => 'partial',
+    'person.gender' => 'exact',
+    'person.lastname' => 'partial',
+    'person.firstname' => 'partial',
     'email' => 'partial'
 ])]
 class User implements UserInterface

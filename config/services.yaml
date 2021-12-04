@@ -6,6 +6,12 @@
 parameters:
 
 services:
+
+    acme_api.event.authentication_success_listener:
+        class: App\EventListener\JwtEventListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
+
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.

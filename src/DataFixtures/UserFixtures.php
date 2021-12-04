@@ -19,6 +19,7 @@ class UserFixtures extends Fixture
     {
         $admin = (new User())
             ->setEmail('admin@scm.fr')
+            ->setAvatar('/default-avatar.jpg')
             ->setCreatedAt(new DateTimeImmutable())
             ->setUpdatedAt(new DateTimeImmutable())
             ->setCreatedBy('fixtures')
