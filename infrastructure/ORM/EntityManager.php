@@ -24,4 +24,9 @@ class EntityManager implements ManagerInterface
     {
         $this->em->flush();
     }
+
+    public function getRepository(string $className): ?object
+    {
+        return $this->em->getRepository($className);
+    }
 }

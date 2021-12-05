@@ -9,7 +9,7 @@ framework:
                 # and/or add your own
                 middleware:
                     # service ids that implement Symfony\Component\Messenger\Middleware\MiddlewareInterface
-                    - 'App\Middleware\UserMiddleware'
+                    - 'App\Middleware\GlobalMiddleware'
 
         # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
         # failure_transport: failed
@@ -22,6 +22,7 @@ framework:
 
         routing:
             # Route your messages to the transports
-            'SCM\User\Entity\User': sync
-            'SCM\User\Message\UserRemove': sync
             'SCM\User\Message\UserPersist': sync
+            'SCM\News\Message\Post\PostPersist': sync
+            'SCM\News\Message\Comment\CommentPersist': sync
+            'SCM\Global\Message\EntityRemove': sync

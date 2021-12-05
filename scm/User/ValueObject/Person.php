@@ -18,7 +18,7 @@ class Person
      * @var string|null
      */
     #[Assert\NotBlank(message:'Merci de renseigner le nom')]
-    #[Groups(["user_get", "user_create"])]
+    #[Groups(["user:get", "user:create", "post:get", "post:comment:get"])]
     private ?string $lastname;
 
     /**
@@ -27,20 +27,20 @@ class Person
      * @var string|null
      */
     #[Assert\NotBlank(message:'Merci de renseigner le prénom')]
-    #[Groups(["user_get", "user_create"])]
+    #[Groups(["user:get", "user:create", "post:get", "post:comment:get"])]
     private ?string $firstname;
 
     /**
      * @ORM\Column(type="datetime")
      */
     #[Assert\NotBlank(message:'Merci de renseigner le date de naissance')]
-    #[Groups(["user_get", "user_create"])]
+    #[Groups(["user:get", "user:create"])]
     private ?DateTime $dateOfBirthday;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    #[Groups(["user_get", "user_create"])]
+    #[Groups(["user:get", "user:create"])]
     private ?bool $gender;
 
     public function __construct(

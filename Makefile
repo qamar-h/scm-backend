@@ -54,7 +54,7 @@ cc: ## Clear the cache. DID YOU CLEAR YOUR CACHE????
 	$(DOCKER) exec -i $(PROJECT) $(PHP) c:c
 
 warmup: ## Warmup the cache
-	$(DOCKER) EXEC -I $(PROJECT) $(PHP) cache:warmup
+	$(DOCKER) exec -i $(PROJECT) $(PHP) cache:warmup
 
 fix-perms: ## Fix permissions of all var files
 	sudo chmod 777 ./var ./vendor ./php ./
@@ -159,8 +159,11 @@ reload-fixtures:## reload just fixtures
 drop-db:## Drop the  database (before using this command, connect on your container with make:bash)
 	$(DOCKER) exec -i $(PROJECT) $(PHP)   doctrine:database:drop --force --no-interaction
 
+app:
+	$(DOCKER) exec -it $(PROJECT) bash
+
 app-db: ## MYSQL CLI access
-	$(DOCKER) exec -it $(PROJECT_DB) sh -c "mysql -u root -p password scm"
+	$(DOCKER) exec -it $(PROJECT_DB) sh -c "mysql -u root -ppassword scm"
 
 ## —— Tests ✅ —————————————————————————————————————————————————————————————————
 test: phpunit.xml check ## Run main functional and unit tests
@@ -173,11 +176,11 @@ test-all: phpunit.xml ## Run all tests
 	$(PHPUNIT) --stop-on-failure
 
 phpunit: ## Run PHP unit test
-	$(DOCKER) exec -i $(PROJECT) $(PHPUNIT)
+	@$(DOCKER) exec -i $(PROJECT) $(PHPUNIT)
 
 phpstan: ## Run PHP STAN test
-	$(DOCKER) exec -i $(PROJECT) $(PHPSTAN)
+	@$(DOCKER) exec -i $(PROJECT) $(PHPSTAN)
 
 phpcs: ## Run PHP CS test
-	$(DOCKER) exec -i $(PROJECT) $(PHP_CS) src/ scm/ infrastructure/
+	@$(DOCKER) exec -i $(PROJECT) $(PHP_CS) src/ scm/ infrastructure/
 

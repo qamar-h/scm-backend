@@ -10,19 +10,19 @@ trait TimestampableTrait
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    #[Groups(["user_get"])]
+    #[Groups(["user:get", "post:get"])]
     private ?\DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    #[Groups(["user_get"])]
+    #[Groups(["user:get", "post:get"])]
     private ?\DateTimeInterface $updatedAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    #[Groups(["user_get"])]
+    #[Groups(["user:get", "post:get"])]
     private ?\DateTimeInterface $deletedAt;
 
     public function getCreatedAt(): ?\DateTimeInterface
