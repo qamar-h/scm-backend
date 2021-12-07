@@ -57,7 +57,7 @@ warmup: ## Warmup the cache
 	$(DOCKER) exec -i $(PROJECT) $(PHP) cache:warmup
 
 fix-perms: ## Fix permissions of all var files
-	sudo chmod 777 ./var ./vendor ./php ./
+	sudo chmod 777 ./var ./vendor ./php ./ .git
 
 assets: purge ## Install the assets with symlinks in the public folder
 	$(DOCKER) EXEC -I $(PROJECT) $(PHP) assets:install public/ --symlink --relative
