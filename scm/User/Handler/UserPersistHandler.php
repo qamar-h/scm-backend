@@ -14,8 +14,7 @@ class UserPersistHandler implements HandlerInterface
 {
     public function __construct(
         private UserPasswordEncoder $encoder,
-        private ManagerInterface $em,
-        private SecurityInterface $security
+        private ManagerInterface $em
     ) {
     }
 
@@ -34,12 +33,7 @@ class UserPersistHandler implements HandlerInterface
 
         if ($user->getId() === null) {
             $user->setAvatar('/default-avatar.jpg');
-            $user->setCreatedAt(new DateTimeImmutable());
-            $user->setCreatedBy($this->currentUserFullName());
         }
-
-        $user->setUpdatedAt(new DateTimeImmutable());
-        $user->setUpdatedBy($this->currentUserFullName());
 
         $this->em->persist($user);
         $this->em->flush();
@@ -48,11 +42,5 @@ class UserPersistHandler implements HandlerInterface
     private function givePassword(User $user): bool
     {
         return $user->getPlainPassword() == '' && $user->getId() === null;
-    }
-
-    private function currentUserFullName(): string
-    {
-        return $this->security->getUser() !== null ?
-        $this->security->getUser()->getPerson()->getFullname() : '';
     }
 }

@@ -10,19 +10,19 @@ trait BlameableTrait
     /**
      * @ORM\Column(type="string", nullable=false)
      */
-    #[Groups(["user_get"])]
+    #[Groups(["user:get", "post:get"])]
     private ?string $createdBy;
 
     /**
      * @ORM\Column(type="string", nullable=false)
      */
-    #[Groups(["user_get"])]
+    #[Groups(["user:get", "post:get"])]
     private ?string $updatedBy;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    #[Groups(["user_get"])]
+    #[Groups(["user:get", "post:get"])]
     private ?string $deletedBy;
 
     public function getCreatedBy(): ?string

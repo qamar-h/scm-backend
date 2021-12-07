@@ -9,4 +9,6 @@ interface ManagerInterface
     public function remove(object $object): void;
 
     public function flush(): void;
+
+    public function getRepository(string $className): ?object;
 }
