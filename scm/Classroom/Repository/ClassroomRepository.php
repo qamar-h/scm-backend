@@ -1,4 +1,4 @@
-<?php
+<?ph
 
 namespace SCM\Classroom\Repository;
 
@@ -7,5 +7,5 @@ use Infrastructure\ORM\AbstractRepository;
 
 class ClassroomRepository extends AbstractRepository
 {
- protected string  $entityClass =  Classroom::class;
+    protected string  $entityClass =  Classroom::class;
 }
