@@ -1,6 +1,7 @@
 <?php
 
 namespace SCM\Classroom\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
 use SCM\Utils\Entity\BlameableTrait;
 use SCM\Utils\Entity\TimestampableTrait;
@@ -14,8 +15,8 @@ use SCM\Classroom\Repository\ClassroomRepository;
 class Classroom
 {
     use TimestampableTrait;
-
     use BlameableTrait;
+   
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

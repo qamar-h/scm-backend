@@ -1,8 +1,9 @@
 FROM php:8.0-apache
 
-RUN apt-get update
+WORKDIR /var/www/html
 
-RUN apt-get install -y \
+RUN apt-get update && \
+    apt-get install -y \
     libonig-dev\
     git \
     zip \
@@ -19,9 +20,8 @@ RUN apt-get install -y \
     libreadline-dev \
     libfreetype6-dev \
     default-mysql-client \
-    g++
-
-RUN docker-php-ext-install \
+    g++ && \
+    docker-php-ext-install \
     bz2 \
     intl \
     iconv \
@@ -30,13 +30,14 @@ RUN docker-php-ext-install \
     calendar \
     mbstring \
     pdo_mysql \
-    zip
+    zip && \
+    a2enmod rewrite headers && \
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+    useradd -ms /bin/bash the_user -g www-data && \
+    chown the_user:www-data -R /var/www/html 
+    
+USER the_user
 
-WORKDIR /var/www/html
-
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
-
-RUN a2enmod rewrite headers
 
 EXPOSE 80
