@@ -184,3 +184,5 @@ phpstan: ## Run PHP STAN test
 phpcs: ## Run PHP CS test
 	@$(DOCKER) exec -i $(PROJECT) $(PHP_CS) src/ scm/ infrastructure/
 
+phpmd:
+	@$(DOCKER) exec -i $(PROJECT) ./vendor/bin/phpmd src/,scm/,infrastructure/ ansi ./phpmd.xml --exclude src/Kernel.php
