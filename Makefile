@@ -33,12 +33,12 @@ DOCKER_COMP   = docker-compose
 .DEFAULT_GOAL = help
 .PHONY       = 
 
-## —— 🐝 View full command 🐝 ———————————————————————————————————
+## —— 🐝 View full command 🐝 —————————————————————————————————————————————————————————————
 
 help: ## Outputs this help screen
 	@grep -E '(^[a-zA-Z0-9_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 
-## —— Composer 🧙‍♂️ ————————————————————————————————————————————————————————————
+## —— Composer 🧙‍♂️ ——————————————————————————————————————————————————————————————————————————
 install: ## Install vendors according to the current composer.lock file
 	$(DOCKER) exec $(PROJECT) composer install --no-progress --prefer-dist --optimize-autoloader
 	
@@ -57,7 +57,7 @@ warmup: ## Warmup the cache
 	$(DOCKER) exec -i $(PROJECT) $(PHP) cache:warmup
 
 fix-perms: ## Fix permissions of all var files
-	sudo chmod 777 ./var ./vendor ./php ./
+	sudo chmod 777 ./var ./vendor ./php ./ .git
 
 assets: purge ## Install the assets with symlinks in the public folder
 	$(DOCKER) EXEC -I $(PROJECT) $(PHP) assets:install public/ --symlink --relative
@@ -123,7 +123,7 @@ delete-images: ## Delete Delete all images
 stop-containers: ## Stop all containers
 	$(DOCKER) stop `docker ps -q`
 
-## —— Stripe 💳 ————————————————————————————————————————————————————————
+## —— Stripe 💳 ————————————————————————————————————————————————————————————————
 
 stripe: ## install stripe
 	$(DOCKER) exec  $(PROJECT) composer require stripe/stripe-php
