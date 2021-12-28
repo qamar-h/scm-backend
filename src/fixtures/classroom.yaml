@@ -1,0 +1,11 @@
+SCM\Classroom\Entity\Classroom:
+  classroom_{1..15}:
+    name: 'test'
+    description: '<text(200)>'
+    maxStudent: '<numberBetween(3, 13)>'
+    minAge : 18
+    enabled: true
+    startDate: <date_create('2021-04-03')>
+    endDate: <date_create('2021-04-03')>
+
+    

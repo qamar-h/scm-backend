@@ -16,7 +16,7 @@ class Classroom
 {
     use TimestampableTrait;
     use BlameableTrait;
-   
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

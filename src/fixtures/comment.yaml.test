@@ -1,0 +1,9 @@
+SCM\News\Entity\Comment:
+  comment_{1..200}:
+    comment: <text(200)>
+    post: "@post"
+    author: "@admin"
+    createdAt : <dateTime('now','Europe/Paris')>
+    updatedAt : <dateTime('now','Europe/Paris')>
+    createdBy: 'fixtures'
+    updatedBy: 'fixtures' 

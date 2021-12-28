@@ -6,6 +6,8 @@
 parameters:
 
 services:
+    App\fixtures\Providers\HashPasswordProvider:
+        tags: [ { name: nelmio_alice.faker.provider } ]
 
     acme_api.event.authentication_success_listener:
         class: App\EventListener\JwtEventListener

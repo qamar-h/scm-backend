@@ -1,0 +1,26 @@
+SCM\User\Entity\User:
+    admin:
+        password: <hashPassword('admin')>
+        email: 'admin@scm.fr'
+        avatar: '/default-avatar.jpg'
+        createdAt : <dateTime('now','Europe/Paris')>
+        updatedAt : <dateTime('now','Europe/Paris')>
+        createdBy: 'fixtures'
+        updatedBy: 'fixtures' 
+        person.lastName : 'Hayat'
+        person.firstname: 'Qamar'
+        person.dateOfBirthday: <date_create('1988-04-03')>
+        person.gender:  true
+
+    user_{1..25}:
+        password: <hashPassword('test')>
+        email: <email()>
+        avatar: '/default-avatar.jpg'
+        createdAt : <dateTime( 'now','Europe/Paris')>
+        updatedAt : <dateTime('now','Europe/Paris')>
+        createdBy: 'fixtures'
+        updatedBy: 'fixtures'
+        person.lastName : '<lastName()>'
+        person.firstname: '<firstName()>'
+        person.dateOfBirthday: <date_create('1988-04-03')>
+        person.gender:  true

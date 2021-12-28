@@ -146,7 +146,7 @@ load-fixtures: ## Build the DB, control the schema validity, load fixtures and c
 	 $(DOCKER) exec -i $(PROJECT) $(PHP) --env=dev doctrine:schema:drop --force
 	 $(DOCKER) exec -i $(PROJECT) $(PHP) --env=dev doctrine:schema:create
 	 $(DOCKER) exec -i $(PROJECT) $(PHP) --env=dev doctrine:schema:validate
-	 $(DOCKER) exec -i $(PROJECT) $(PHP) --env=dev doctrine:fixtures:load --no-interaction
+	 $(DOCKER) exec -i $(PROJECT) $(PHP) --env=dev hautelook:fixtures:load --no-interaction 
 
 rebuild-database: drop-db create-db migration migrate-force load-fixtures ## Drop database, create database, Doctrine migration migrate,reload fixtures
 
