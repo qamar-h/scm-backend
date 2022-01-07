@@ -15,14 +15,14 @@ use SCM\Utils\Entity\TimestampableTrait;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Infrastructure\ApiPlatform\DeletedAtFilter;
 use Doctrine\Common\Collections\Collection;
-use SCM\News\Entity\{ Post, Comment };
-use SCM\User\Message\{ UserPersist, UserRemove };
+use SCM\News\Entity\{Post, Comment};
+use SCM\User\Message\{UserPersist, UserRemove};
 
 /**
  * @ORM\Entity(repositoryClass=SCM\User\Repository\UserRepository::class)
  */
 #[ApiResource(
-    collectionOperations:[
+    collectionOperations: [
         "post" => ["messenger" => true,  "output" => false, "status" => 201],
         "get"
     ],
@@ -70,7 +70,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Assert\NotBlank(message:'Merci de renseigner une adresse email')]
+    #[Assert\NotBlank(message: 'Merci de renseigner une adresse email')]
     #[Groups(["user:get", "user:create"])]
     private string $email;
 
@@ -102,7 +102,6 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="author")
      */
     private $comments;
-
     public function __construct()
     {
         $this->person = new Person();
