@@ -5,13 +5,32 @@ namespace SCM\Classroom\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use SCM\Utils\Entity\BlameableTrait;
 use SCM\Utils\Entity\TimestampableTrait;
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use SCM\Classroom\Repository\ClassroomRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ClassroomRepository::class)
  */
-#[ApiResource]
+#[ApiResource(
+    shortName:"Classroom",
+    collectionOperations:[
+        "post" => ["messenger" => true,  "output" => false, "status" => 201],
+        "get"
+    ],
+    itemOperations: [
+        "get",
+        "put",
+        "patch",
+        "delete" => ["messenger" => true,  "output" => false, "status" => 202],
+    ],
+    denormalizationContext: ['groups' => ["classroom:create"]],
+    normalizationContext: ['groups' => ["classroom:get"]]
+)]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'title','slug'])]
+#[ApiFilter(SearchFilter::class, properties: ['title' => 'partial', 'slug' => 'partial','forAll' => 'exact'])]
+#[ApiFilter(DeletedAtFilter::class)]
 class Classroom
 {
     use TimestampableTrait;
@@ -27,21 +46,25 @@ class Classroom
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["classroom:get"])]
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    #[Groups(["classroom:get"])]
     private $description;
 
     /**
      * @ORM\Column(type="integer")
      */
+    #[Groups(["classroom:get"])]
     private $maxStudent;
 
     /**
      * @ORM\Column(type="integer")
      */
+    #[Groups(["classroom:get"])]
     private $minAge;
 
     /**
@@ -52,11 +75,13 @@ class Classroom
     /**
      * @ORM\Column(type="date")
      */
+    #[Groups(["classroom:get"])]
     private $startDate;
 
     /**
      * @ORM\Column(type="date")
      */
+    #[Groups(["classroom:get"])]
     private $endDate;
 
     public function getId(): ?int

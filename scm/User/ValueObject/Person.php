@@ -19,7 +19,7 @@ class Person
      */
     #[Assert\NotBlank(message:'Merci de renseigner le nom')]
     #[Groups(["user:get", "user:create", "post:get", "post:comment:get"])]
-    private ?string $lastname;
+    private ?string $lastName;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -28,7 +28,7 @@ class Person
      */
     #[Assert\NotBlank(message:'Merci de renseigner le prénom')]
     #[Groups(["user:get", "user:create", "post:get", "post:comment:get"])]
-    private ?string $firstname;
+    private ?string $firstName;
 
     /**
      * @ORM\Column(type="datetime")
@@ -44,53 +44,53 @@ class Person
     private ?bool $gender;
 
     public function __construct(
-        string $firsntame = '',
-        string $lastname = '',
+        string $firstName = '',
+        string $lastName = '',
         Datetime $dateOfBirthday = null,
         bool $gender = true
     ) {
-        $this->firstname = $firsntame;
-        $this->lastname = $lastname;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
         $this->dateOfBirthday = $dateOfBirthday;
         $this->gender = $gender;
     }
 
     /**
-     * Get the value of lastname
+     * Get the value of lastName
      */
-    public function getLastname(): ?string
+    public function getLastName(): ?string
     {
-        return $this->lastname;
+        return $this->lastName;
     }
 
     /**
-     * Set the value of lastname
+     * Set the value of lastName
      *
      * @return  self
      */
-    public function setLastname(?string $lastname): self
+    public function setLastName(?string $lastName): self
     {
-        $this->lastname = $lastname;
+        $this->lastName = $lastName;
 
         return $this;
     }
 
     /**
-     * Get the value of firstname
+     * Get the value of firstName
      */
-    public function getFirstname(): ?string
+    public function getFirstName(): ?string
     {
-        return $this->firstname;
+        return $this->firstName;
     }
 
     /**
-     * Set the value of firstname
+     * Set the value of firstName
      *
      * @return  self
      */
-    public function setFirstname(?string $firstname): self
+    public function setFirstName(?string $firstName): self
     {
-        $this->firstname = $firstname;
+        $this->firstName = $firstName;
 
         return $this;
     }
@@ -128,13 +128,13 @@ class Person
     }
 
     /**
-     * Get fullname from firstname and lastname
+     * Get fullname from firstName and lastName
      *
      * @return string
      */
     public function getFullname(): string
     {
-        return $this->getFirstname()  . ' ' . $this->getLastname();
+        return $this->getFirstName()  . ' ' . $this->getLastName();
     }
 
     /**
