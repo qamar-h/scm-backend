@@ -6,7 +6,13 @@
 parameters:
 
 services:
-    App\fixtures\Providers\HashPasswordProvider:
+    App\Fixtures\Providers\ClassroomProvider:
+        arguments:
+            - '@Faker\Generator'
+        tags: [ { name: nelmio_alice.faker.provider } ]
+
+    App\Fixtures\Providers\PasswordHasherProvider:
+        arguments:
         tags: [ { name: nelmio_alice.faker.provider } ]
 
     acme_api.event.authentication_success_listener:

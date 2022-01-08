@@ -25,9 +25,12 @@ CODESNIFFER   = ./vendor/squizlabs/php_codesniffer/bin/phpcs
 
 # Executables: local only
 SYMFONY_BIN   = symfony 
-apt-get       = sudo apt-get
 DOCKER        = docker
 DOCKER_COMP   = docker-compose
+
+TOKEN_PASS 	  = f3550d3aa3b898071a040b04784c5011
+TOKEN_KEY_PRIVATE = config/jwt/private.pem
+TOKEN_KEY_PUBLIC = config/jwt/public.pem
 
 # Misc
 .DEFAULT_GOAL = help
@@ -92,6 +95,20 @@ dispatcher : ## see dispatcher event
 framework : ## see framework config
 	$(DOCKER) exec -i $(PROJECT) $(PHP) debug:config framework 
 
+## —— Token ————————————————————————————————————————————————————————————————
+
+jwt-private-key: ## create jwt private key
+	$(DOCKER) exec -i $(PROJECT) openssl genrsa -out $(TOKEN_KEY_PRIVATE) -aes256 -passout pass:$(TOKEN_PASS) 4096
+
+jwt-public-key: ## create jwt public key
+	$(DOCKER) exec -i $(PROJECT) openssl rsa -pubout -in $(TOKEN_KEY_PRIVATE) --passin pass:$(TOKEN_PASS) -out $(TOKEN_KEY_PUBLIC)
+
+jwt-create-folder:
+	$(DOCKER) exec -i $(PROJECT) mkdir -p config/jwt
+
+jwt-delete-folder:
+	$(DOCKER) exec -i $(PROJECT) rm -r config/jwt
+
 ## —— Docker 🐳 ————————————————————————————————————————————————————————————————
 up: ## Start the docker hub (MySQL,phpMyadmin,php)
 	$(DOCKER_COMP) up -d
@@ -133,11 +150,11 @@ stripe: ## install stripe
 commands: ## Display all commands in the project namespace
 	$(DOCKER) exec -i $(PROJECT) $(PHP)  list $(PROJECT)
 
-build : docker-build up install load-fixtures   ## Build project, Install vendors according to the current composer.lock file load fixtures
+build : docker-build up install jwt-create-folder jwt-private-key jwt-public-key load-fixtures   ## Build project, Install vendors according to the current composer.lock file load fixtures
 
 reload: restart load-fixtures  ## Load fixtures 
 
-stop: down  ## Stop docker and the Symfony binary server
+stop: jwt-delete-folder down  ## Stop docker and the Symfony binary server
 
 
 load-fixtures: ## Build the DB, control the schema validity, load fixtures and check the migration status

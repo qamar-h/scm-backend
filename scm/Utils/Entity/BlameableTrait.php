@@ -5,7 +5,7 @@ namespace SCM\Utils\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-trait BlameableTrait
+trait  BlameableTrait
 {
     /**
      * @ORM\Column(type="string", nullable=false)
