@@ -1,11 +1,11 @@
 <?php
 
-namespace App\fixtures\Providers;
+namespace App\Fixtures\Providers;
 
 use SCM\User\Entity\User;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class HashPasswordProvider
+class PasswordHasherProvider
 {
     /**
      * @var UserPasswordHasherInterface
@@ -17,7 +17,7 @@ class HashPasswordProvider
         $this->encoder = $encoder;
     }
 
-    public function hashPassword(string $plainPassword): string
+    public function passwordHasher(string $plainPassword): string
     {
         return $this->encoder->hashPassword(new User(), $plainPassword);
     }

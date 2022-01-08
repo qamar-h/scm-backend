@@ -7,14 +7,17 @@ use SCM\Utils\Entity\BlameableTrait;
 use SCM\Utils\Entity\TimestampableTrait;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Infrastructure\ApiPlatform\DeletedAtFilter;
 use SCM\Classroom\Repository\ClassroomRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ORM\Entity(repositoryClass=ClassroomRepository::class)
  */
 #[ApiResource(
-    shortName:"Classroom",
+    shortName:"classroom",
     collectionOperations:[
         "post" => ["messenger" => true,  "output" => false, "status" => 201],
         "get"
