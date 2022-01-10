@@ -21,7 +21,7 @@ SCM\Classroom\Entity\Classroom:
   classroom_{1..15}:
     name: '<classroomName()>'
     description: '<fr_FR:realtext(200)>'
-    maxStudent: '<numberBetween(3, 20)>'
+    maxStudent: '<numberBetween(3, 21)>'
     minAge : 18
     enabled: true
     startDate: <date_create('2021-04-03')>
