@@ -189,8 +189,7 @@ test: phpunit.xml check ## Run main functional and unit tests
 	@$(PHPUNIT) --testsuite=$(testsuite) --filter=$(filter) --stop-on-failure
 
 
-test-all: phpunit.xml ## Run all tests
-	$(PHPUNIT) --stop-on-failure
+test-all:phpunit phpstan phpcs phpmd ## Run all tests
 
 phpunit: ## Run PHP unit test
 	@$(DOCKER) exec -i $(PROJECT) $(PHPUNIT)

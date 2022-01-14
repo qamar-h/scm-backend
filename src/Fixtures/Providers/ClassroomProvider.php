@@ -7,7 +7,7 @@ use Faker\Provider\Base as BaseProvider;
 final class ClassroomProvider extends BaseProvider
 {
     /**
-     * @var array List of job titles.
+     * @var array List of classroom titles.
      */
     private const NAME_PROVIDER = [
         'name' => [
@@ -25,7 +25,7 @@ final class ClassroomProvider extends BaseProvider
     ];
 
     /**
-     * @return string Random job title.
+     * @return string Random classroom title.
      */
     public function classroomName(): string
     {
