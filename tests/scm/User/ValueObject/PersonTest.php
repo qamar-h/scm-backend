@@ -37,6 +37,6 @@ class PersonTest extends TestCase
     public function testPersonGetAge(): void
     {
         $person = new Person('Qamar', 'Hayat', new \DateTime('1987-12-26'));
-        $this->assertEquals(33, $person->getAge());
+        $this->assertEquals( 34, $person->getAge());
     }
 }

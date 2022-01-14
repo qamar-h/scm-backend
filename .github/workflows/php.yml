@@ -3,11 +3,11 @@ on:
   pull_request:
     branches:
       - main
-      - developement
+      - development
   push:
     branches:
       - main
-      - developement
+      - development
 jobs:
 
   symfony:

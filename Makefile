@@ -25,20 +25,23 @@ CODESNIFFER   = ./vendor/squizlabs/php_codesniffer/bin/phpcs
 
 # Executables: local only
 SYMFONY_BIN   = symfony 
-apt-get       = sudo apt-get
 DOCKER        = docker
 DOCKER_COMP   = docker-compose
+
+TOKEN_PASS 	  = f3550d3aa3b898071a040b04784c5011
+TOKEN_KEY_PRIVATE = config/jwt/private.pem
+TOKEN_KEY_PUBLIC = config/jwt/public.pem
 
 # Misc
 .DEFAULT_GOAL = help
 .PHONY       = 
 
-## —— 🐝 View full command 🐝 ———————————————————————————————————
+## —— 🐝 View full command 🐝 —————————————————————————————————————————————————————————————
 
 help: ## Outputs this help screen
 	@grep -E '(^[a-zA-Z0-9_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 
-## —— Composer 🧙‍♂️ ————————————————————————————————————————————————————————————
+## —— Composer 🧙‍♂️ ——————————————————————————————————————————————————————————————————————————
 install: ## Install vendors according to the current composer.lock file
 	$(DOCKER) exec $(PROJECT) composer install --no-progress --prefer-dist --optimize-autoloader
 	
@@ -57,7 +60,7 @@ warmup: ## Warmup the cache
 	$(DOCKER) exec -i $(PROJECT) $(PHP) cache:warmup
 
 fix-perms: ## Fix permissions of all var files
-	sudo chmod 777 ./var ./vendor ./php ./
+	sudo chmod 777 ./var ./vendor ./php ./ .git
 
 assets: purge ## Install the assets with symlinks in the public folder
 	$(DOCKER) EXEC -I $(PROJECT) $(PHP) assets:install public/ --symlink --relative
@@ -92,6 +95,20 @@ dispatcher : ## see dispatcher event
 framework : ## see framework config
 	$(DOCKER) exec -i $(PROJECT) $(PHP) debug:config framework 
 
+## —— Token ————————————————————————————————————————————————————————————————
+
+jwt-private-key: ## create jwt private key
+	$(DOCKER) exec -i $(PROJECT) openssl genrsa -out $(TOKEN_KEY_PRIVATE) -aes256 -passout pass:$(TOKEN_PASS) 4096
+
+jwt-public-key: ## create jwt public key
+	$(DOCKER) exec -i $(PROJECT) openssl rsa -pubout -in $(TOKEN_KEY_PRIVATE) --passin pass:$(TOKEN_PASS) -out $(TOKEN_KEY_PUBLIC)
+
+jwt-create-folder:
+	$(DOCKER) exec -i $(PROJECT) mkdir -p config/jwt
+
+jwt-delete-folder:
+	$(DOCKER) exec -i $(PROJECT) rm -r config/jwt
+
 ## —— Docker 🐳 ————————————————————————————————————————————————————————————————
 up: ## Start the docker hub (MySQL,phpMyadmin,php)
 	$(DOCKER_COMP) up -d
@@ -123,7 +140,7 @@ delete-images: ## Delete Delete all images
 stop-containers: ## Stop all containers
 	$(DOCKER) stop `docker ps -q`
 
-## —— Stripe 💳 ————————————————————————————————————————————————————————
+## —— Stripe 💳 ————————————————————————————————————————————————————————————————
 
 stripe: ## install stripe
 	$(DOCKER) exec  $(PROJECT) composer require stripe/stripe-php
@@ -133,11 +150,11 @@ stripe: ## install stripe
 commands: ## Display all commands in the project namespace
 	$(DOCKER) exec -i $(PROJECT) $(PHP)  list $(PROJECT)
 
-build : docker-build up install load-fixtures   ## Build project, Install vendors according to the current composer.lock file load fixtures
+build : docker-build up install jwt-create-folder jwt-private-key jwt-public-key load-fixtures   ## Build project, Install vendors according to the current composer.lock file load fixtures
 
 reload: restart load-fixtures  ## Load fixtures 
 
-stop: down  ## Stop docker and the Symfony binary server
+stop: jwt-delete-folder down  ## Stop docker and the Symfony binary server
 
 
 load-fixtures: ## Build the DB, control the schema validity, load fixtures and check the migration status
@@ -146,7 +163,7 @@ load-fixtures: ## Build the DB, control the schema validity, load fixtures and c
 	 $(DOCKER) exec -i $(PROJECT) $(PHP) --env=dev doctrine:schema:drop --force
 	 $(DOCKER) exec -i $(PROJECT) $(PHP) --env=dev doctrine:schema:create
 	 $(DOCKER) exec -i $(PROJECT) $(PHP) --env=dev doctrine:schema:validate
-	 $(DOCKER) exec -i $(PROJECT) $(PHP) --env=dev doctrine:fixtures:load --no-interaction
+	 $(DOCKER) exec -i $(PROJECT) $(PHP) --env=dev hautelook:fixtures:load --no-interaction 
 
 rebuild-database: drop-db create-db migration migrate-force load-fixtures ## Drop database, create database, Doctrine migration migrate,reload fixtures
 
@@ -172,8 +189,7 @@ test: phpunit.xml check ## Run main functional and unit tests
 	@$(PHPUNIT) --testsuite=$(testsuite) --filter=$(filter) --stop-on-failure
 
 
-test-all: phpunit.xml ## Run all tests
-	$(PHPUNIT) --stop-on-failure
+test-all:phpunit phpstan phpcs phpmd ## Run all tests
 
 phpunit: ## Run PHP unit test
 	@$(DOCKER) exec -i $(PROJECT) $(PHPUNIT)
