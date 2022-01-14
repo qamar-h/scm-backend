@@ -3,11 +3,11 @@ on:
   pull_request:
     branches:
       - main
-      - developement
+      - development
   push:
     branches:
       - main
-      - developement
+      - development
 jobs:
 
   symfony:
@@ -148,8 +148,8 @@ jobs:
         id: run-newman
         uses: anthonyvscode/newman-action@v1
         with:
-          collection: postman/SCM.postman_collection.json
-          environment: postman/SCM.postman_environment.json
+          collection: tests/postman/SCM.postman_collection.json
+          environment: tests/postman/SCM.postman_environment.json
           reporters: cli
 
       # -------------------------
